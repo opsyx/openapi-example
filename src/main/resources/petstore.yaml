@@ -1,0 +1,291 @@
+---
+openapi: 3.0.2
+info:
+  title: petstore
+  version: 1.0.0
+  description: |-
+    A sample API that uses a petstore as an example to demonstrate features
+    in the OpenAPI 3.0 specification
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Swagger API Team
+    url: http://swagger.io
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: http://petstore.swagger.io/api
+paths:
+  /pets:
+    get:
+      tags:
+      - Pets
+      parameters:
+      - style: form
+        name: tags
+        description: tags to filter by
+        schema:
+          type: array
+          items:
+            type: string
+        in: query
+        required: false
+      - name: limit
+        description: maximum number of results to return
+        schema:
+          format: int32
+          type: integer
+        in: query
+        required: false
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+              examples:
+                laurent_cats:
+                  value:
+                  - id: 1
+                    name: Zaza
+                    tag: cat
+                  - id: 2
+                    name: Tigresse
+                    tag: cat
+                  - id: 3
+                    name: Maki
+                    tag: cat
+                  - id: 4
+                    name: Toufik
+                    tag: cat
+          description: pet response
+      operationId: findPets
+      description: |
+        Returns all pets from the system that the user has access to
+    post:
+      requestBody:
+        description: Pet to add to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPet'
+            examples:
+              tigresse:
+                value:
+                  name: Tigresse
+                  tag: cat
+        required: true
+      tags:
+      - Pets
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+              examples:
+                tigresse:
+                  value:
+                    id: 2
+                    name: Tigresse
+                    tag: cat
+          description: pet response
+      operationId: addPet
+      description: Creates a new pet in the store.  Duplicates are allowed
+  /pets/{id}:
+    get:
+      tags:
+      - Pets
+      parameters:
+      - examples:
+          zaza:
+            value: 1
+        name: id
+        description: ID of pet to fetch
+        schema:
+          format: int64
+          type: integer
+        in: path
+        required: true
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+              examples:
+                zaza:
+                  value:
+                    id: 1
+                    name: Zaza
+                    tag: cat
+          description: pet response
+      operationId: findPetById
+      description: |-
+        Returns a user based on a single ID, if the user does not have
+        access to the pet
+    delete:
+      tags:
+      - Pets
+      parameters:
+      - name: id
+        description: ID of pet to delete
+        schema:
+          format: int64
+          type: integer
+        in: path
+        required: true
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+        "204":
+          description: pet deleted
+      operationId: deletePet
+      description: deletes a single pet based on the ID supplied
+    parameters:
+    - name: id
+      description: Pet identifier
+      schema:
+        type: integer
+      in: path
+      required: true
+  /profiles:
+    get:
+      tags:
+      - Profiles
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+          description: profile response
+      operationId: getProfiles
+      description: returns all profiles
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProfileRequest'
+        required: true
+      tags:
+      - Profiles
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: create new profile answer
+      operationId: createProfile
+      description: create a profile
+  /profiles/{id}:
+    get:
+      tags:
+      - Profiles
+      parameters:
+      - name: id
+        description: id of profile to fetch
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: return a profile by id
+        "204":
+          description: No content (profile not found)
+      operationId: getProfileById
+    delete:
+      tags:
+      - Profiles
+      responses:
+        "204":
+          description: profile deleted
+      operationId: deleteProfile
+    parameters:
+    - name: id
+      description: id to fetch/delete
+      schema:
+        type: integer
+      in: path
+      required: true
+components:
+  schemas:
+    Pet:
+      allOf:
+      - $ref: '#/components/schemas/NewPet'
+      - required:
+        - id
+        properties:
+          id:
+            format: int64
+            type: integer
+    NewPet:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        tag:
+          type: string
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+    Profile:
+      allOf:
+      - $ref: '#/components/schemas/NewProfileRequest'
+      - required:
+        - id
+        properties:
+          id:
+            format: int64
+            type: integer
+    NewProfileRequest:
+      description: Request for creating a new profile
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          description: name of profile
+          type: string
