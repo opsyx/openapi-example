@@ -1,2 +1,4 @@
 EXCLUDED_DIRECTORIES:
   - .github/workflows
+FILTER_REGEX_INCLUDE: (src/)
+FILTER_REGEX_EXCLUDE: (.github/workflows/)
