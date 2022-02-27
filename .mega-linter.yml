@@ -1,1 +1,2 @@
-EXCLUDED_DIRECTORIES: .github/workflows
+EXCLUDED_DIRECTORIES:
+  - .github/workflows
