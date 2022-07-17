@@ -11,6 +11,8 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <kotlin.version>1.6.10</kotlin.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -78,7 +80,17 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.4.2.Final</version>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>2.1.20</version>
         </dependency>
     </dependencies>
 
@@ -101,18 +113,17 @@
 
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <inputSpec>${project.basedir}/src/main/resources/petstore.yaml</inputSpec>
-                            <generatorName>spring</generatorName>
-                            <templateDirectory>${project.basedir}/templates/</templateDirectory>
+                            <generatorName>kotlin-spring</generatorName>
                             <configOptions>
                                 <basePackage>com.opsyx.openapi.sample</basePackage>
                                 <modelPackage>com.opsyx.openapi.sample.model</modelPackage>
                                 <apiPackage>com.opsyx.openapi.sample.api</apiPackage>
-                                <dateLibrary>java8</dateLibrary>
                                 <delegatePattern>false</delegatePattern>
                                 <interfaceOnly>true</interfaceOnly>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <sourceFolder>src/gen/kotlin/main</sourceFolder>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <withXml>false</withXml>
+                                <exceptionHandler>false</exceptionHandler>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -139,6 +150,67 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>lombok</plugin>
+                    </compilerPlugins>
+<!--                    <pluginOptions>-->
+<!--                        <option>lombok:config=${project.basedir}/lombok.config</option>-->
+<!--                    </pluginOptions>-->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-lombok</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>1.18.20</version>
+                        <scope>compile</scope>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                                <sourceDir>src/main/java</sourceDir>
+                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${mapstruct.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
