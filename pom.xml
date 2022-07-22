@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <spring.boot.version>2.6.3</spring.boot.version>
+        <spring.boot.version>2.7.2</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.2</version>
+            <version>0.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
+            <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.4.2.Final</version>
+            <version>1.5.2.Final</version>
         </dependency>
     </dependencies>
 
@@ -90,7 +90,7 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <!-- RELEASE_VERSION -->
-                <version>5.4.0</version>
+                <version>6.0.1</version>
                 <!-- /RELEASE_VERSION -->
                 <executions>
                     <execution>
