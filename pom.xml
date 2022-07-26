@@ -140,11 +140,11 @@
                         </goals>
                         <configuration>
                             <library>feign</library>
-
+                            <apiNameSuffix>ApiClient</apiNameSuffix>
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <inputSpec>${project.basedir}/src/main/resources/petstore.yaml</inputSpec>
                             <generatorName>java</generatorName>
-                            <templateDirectory>${project.basedir}/templates/fFeign</templateDirectory>
+                            <templateDirectory>${project.basedir}/templates/feign</templateDirectory>
                             <generateModelTests>false</generateModelTests>
                             <generateModels>false</generateModels>
                             <generateApiTests>false</generateApiTests>

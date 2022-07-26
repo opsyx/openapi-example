@@ -1,6 +1,6 @@
 package com.opsyx.openapi.sample.configuration;
 
-import com.opsyx.openapi.sample.api.client.PetsApi;
+import com.opsyx.openapi.sample.api.client.PetsApiClient;
 import com.opsyx.openapi.sample.configuration.interceptors.BasicAuthInterceptor;
 import feign.Feign;
 import feign.codec.Decoder;
@@ -18,9 +18,9 @@ public class PetsFeignClientConfig {
 
     @ConditionalOnProperty(name = "pets.api.mockEnabled", havingValue = "false", matchIfMissing = true)
     @Bean
-    public PetsApi petsApiClient(@Value("pets.api.url") String url, BasicAuthInterceptor basicAuthInterceptor) {
+    public PetsApiClient petsApiClient(@Value("pets.api.url") String url, BasicAuthInterceptor basicAuthInterceptor) {
         log.info("Pets FeignClientConfig");
-        return Feign.builder().requestInterceptor(basicAuthInterceptor).client(new OkHttpClient()).encoder(new Encoder.Default()).decoder(new Decoder.Default()).target(PetsApi.class, url);
+        return Feign.builder().requestInterceptor(basicAuthInterceptor).client(new OkHttpClient()).encoder(new Encoder.Default()).decoder(new Decoder.Default()).target(PetsApiClient.class, url);
     }
 
 

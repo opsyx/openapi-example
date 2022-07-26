@@ -1,6 +1,6 @@
 package com.opsyx.openapi.sample.configuration.mock;
 
-import com.opsyx.openapi.sample.api.client.PetsApi;
+import com.opsyx.openapi.sample.api.client.PetsApiClient;
 import com.opsyx.openapi.sample.model.NewPetDto;
 import com.opsyx.openapi.sample.model.PetDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @ConditionalOnProperty(name = "pets.api.mockEnabled", havingValue = "true")
-public class PetsApiMockClient implements PetsApi {
+public class PetsApiMockClient implements PetsApiClient {
 
     @Override
     public PetDto addPet(NewPetDto newPetDto) {

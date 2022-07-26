@@ -17,13 +17,13 @@ public class PetsService {
     private final PetRepository petRepository;
     private final PetMapper petMapper;
 
-    @Cacheable("pets")
+    @Cacheable(value = "pets", key = "#id")
     public Try<PetDto> findById(Long id) {
         return Try.of( () -> petRepository.findById(id).orElseThrow(PetNotFoundException::new))
                 .map(petMapper::map);
     }
 
-    @CacheEvict("pets")
+    @CacheEvict(value = "pets", key = "#id")
     public void deleteById(Long id) {
         petRepository.deleteById(id);
     }
