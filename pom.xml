@@ -80,6 +80,21 @@
             <artifactId>mapstruct</artifactId>
             <version>1.4.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>11.8</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-slf4j</artifactId>
+            <version>11.8</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+            <version>11.8</version>
+        </dependency>
     </dependencies>
 
 
@@ -93,6 +108,7 @@
                 <!-- /RELEASE_VERSION -->
                 <executions>
                     <execution>
+                        <id>server-side</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
@@ -102,7 +118,7 @@
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <inputSpec>${project.basedir}/src/main/resources/petstore.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <templateDirectory>${project.basedir}/templates/</templateDirectory>
+                            <templateDirectory>${project.basedir}/templates/JavaSpring</templateDirectory>
                             <configOptions>
                                 <basePackage>com.opsyx.openapi.sample</basePackage>
                                 <modelPackage>com.opsyx.openapi.sample.model</modelPackage>
@@ -113,6 +129,39 @@
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <withXml>false</withXml>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>client-side</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <library>feign</library>
+
+                            <modelNameSuffix>Dto</modelNameSuffix>
+                            <inputSpec>${project.basedir}/src/main/resources/petstore.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <templateDirectory>${project.basedir}/templates/fFeign</templateDirectory>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModels>false</generateModels>
+                            <generateApiTests>false</generateApiTests>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <basePackage>com.opsyx.openapi.sample.client</basePackage>
+                                <modelPackage>com.opsyx.openapi.sample.model</modelPackage>
+                                <apiPackage>com.opsyx.openapi.sample.api.client</apiPackage>
+                                <legacyDiscriminatorBehavior>true</legacyDiscriminatorBehavior>
+                                <generateModels>false</generateModels>
+                                <dateLibrary>java8</dateLibrary>
+                                <delegatePattern>false</delegatePattern>
+                                <interfaceOnly>true</interfaceOnly>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <withXml>false</withXml>
+                                <hasQueryParams>false</hasQueryParams>
+
                             </configOptions>
                         </configuration>
                     </execution>

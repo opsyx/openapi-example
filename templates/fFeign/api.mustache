@@ -1,0 +1,54 @@
+package {{package}};
+
+{{#legacyDates}}
+    import {{invokerPackage}}.ParamExpander;
+{{/legacyDates}}
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+{{^fullJavaUtil}}
+    import java.util.ArrayList;
+    import java.util.HashMap;
+    import java.util.List;
+    import java.util.Map;
+{{/fullJavaUtil}}
+import feign.*;
+
+{{>generatedAnnotation}}
+public interface {{classname}} {
+
+{{#operations}}{{#operation}}
+    /**
+    * {{summary}}
+    * {{notes}}
+    {{#allParams}}
+        * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}
+    {{/allParams}}
+    {{#returnType}}
+        * @return {{.}}
+    {{/returnType}}
+    {{#externalDocs}}
+        * {{description}}
+        * @see <a href="{{url}}">{{summary}} Documentation</a>
+    {{/externalDocs}}
+    {{#isDeprecated}}
+        * @deprecated
+    {{/isDeprecated}}
+    */
+    {{#isDeprecated}}
+        @Deprecated
+    {{/isDeprecated}}
+    @RequestLine("{{httpMethod}} {{{path}}}{{#hasQueryParams}}?{{/hasQueryParams}}{{#queryParams}}{{baseName}}={{=<% %>=}}{<%paramName%>}<%={{ }}=%>{{^-last}}&{{/-last}}{{/queryParams}}")
+    @Headers({
+    {{#vendorExtensions.x-content-type}}    "Content-Type: {{vendorExtensions.x-content-type}}",
+    {{/vendorExtensions.x-content-type}}    "Accept: {{vendorExtensions.x-accepts}}",{{#headerParams}}
+        "{{baseName}}: {{=<% %>=}}{<%paramName%>}<%={{ }}=%>"{{^-last}},
+        {{/-last}}{{/headerParams}}
+    })
+    {{#returnType}}{{{.}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{nickname}}({{#allParams}}{{^isBodyParam}}{{^isFormParam}}{{^legacyDates}}@Param("{{paramName}}") {{/legacyDates}}{{#legacyDates}}@Param(value="{{paramName}}", expander=ParamExpander.class) {{/legacyDates}}{{/isFormParam}}{{#isFormParam}}@Param("{{baseName}}") {{/isFormParam}}{{/isBodyParam}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}});
+
+
+{{/operation}}
+{{/operations}}
+    }
